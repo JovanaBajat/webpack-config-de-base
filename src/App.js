@@ -18,11 +18,34 @@ class  App extends Component {
     })
   }
 
-  updateValue = (e) => {
-    e.preventDefault()
+  updateValue = (event) => {
+    event.preventDefault()
     this.setState({
-      itemValue: '',
-      items: [...this.state.items, this.state.itemValue]
+      items: [...this.state.items, this.state.itemValue],
+      itemValue: ''
+    })
+  }
+
+  deleteItem = (index) => {
+    this.state.items.splice(index, 1)
+    this.forceUpdate();
+  }
+
+  editItem = (str, ind) => {
+    this.setState({
+      itemValue : str,
+      currentItemIndex : ind,
+      update: true
+    });
+  }
+
+  updateListItem = (e) => {
+    e.preventDefault();
+    let newList = [...this.state.items.slice(0, this.state.currentItemIndex), this.state.itemValue, ...this.state.items.slice(this.state.currentItemIndex +1)];
+    this.setState({
+      items: newList,
+      update: false,
+      itemValue: ''
     })
   }
 
@@ -33,14 +56,26 @@ class  App extends Component {
       <form>
         <input
           onChange={this.handleInputChange}
-          value={this.state.inputValue}/>
-        <button onClick={e => this.updateValue(e)}>Add</button>
+          value={this.state.itemValue}/>
+          {
+            this.state.update ?
+            <button onClick={this.updateListItem}>Update</button>
+            : <button onClick={event => this.updateValue(event)}>Add</button>
+          }
       </form>
       <ul>
-        {this.state.items.map((item, i) => {
+        {this.state.items.map((item, index) => {
           return (
-            <li key={i}>
+            <li key={index}>
             {item}
+            <button
+              onClick={() => this.deleteItem(index)}
+              >X
+            </button>
+            <button
+              onClick={() => this.editItem(item, index)}
+              >Edit
+            </button>
           </li>)
         })}
       </ul>

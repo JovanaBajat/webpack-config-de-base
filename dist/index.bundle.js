@@ -18283,6 +18283,8 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -18292,19 +18294,99 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_Component) {
   _inherits(App, _Component);
 
-  function App() {
+  function App(props) {
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.handleInputChange = function (e) {
+      console.log(e.target.value);
+      _this.setState({
+        itemValue: e.target.value
+      });
+    };
+
+    _this.updateValue = function (event) {
+      event.preventDefault();
+      _this.setState({
+        items: [].concat(_toConsumableArray(_this.state.items), [_this.state.itemValue]),
+        itemValue: ''
+      });
+    };
+
+    _this.deleteItem = function (index) {
+      _this.state.items.splice(index, 1);
+      _this.forceUpdate();
+    };
+
+    _this.editItem = function (index) {
+      _this.state.items.splice(index, 1, _this.state.itemValue);
+    };
+
+    _this.state = {
+      itemValue: '',
+      items: []
+
+    };
+    return _this;
   }
 
   _createClass(App, [{
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
-        'merde'
+        _react2.default.createElement(
+          'h2',
+          null,
+          'todo'
+        ),
+        _react2.default.createElement(
+          'form',
+          null,
+          _react2.default.createElement('input', {
+            onChange: this.handleInputChange,
+            value: this.state.itemValue }),
+          _react2.default.createElement(
+            'button',
+            { onClick: function onClick(event) {
+                return _this2.updateValue(event);
+              } },
+            'Add'
+          )
+        ),
+        _react2.default.createElement(
+          'ul',
+          null,
+          this.state.items.map(function (item, index) {
+            return _react2.default.createElement(
+              'li',
+              { key: index },
+              item,
+              _react2.default.createElement(
+                'button',
+                {
+                  onClick: function onClick() {
+                    return _this2.deleteItem(index);
+                  }
+                },
+                'X'
+              ),
+              _react2.default.createElement(
+                'button',
+                {
+                  onClick: function onClick() {
+                    return _this2.editItem(index);
+                  }
+                },
+                'Edit'
+              )
+            );
+          })
+        )
       );
     }
   }]);

@@ -6,7 +6,7 @@
 
 ## npm i react react-dom webpack
 ## npm i babel-core babel-loader
-## npm i babel-preset-env babel-preset-react
+## npm i babel-preset-env babel-preset-react babel-preset-stage-2
 ## npm i babel-plugin-transform-class-properties
 ## npm i webpack-dev-server -D
 
